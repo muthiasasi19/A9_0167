@@ -13,7 +13,66 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 
+
+@Composable
+fun HomeFilmStatus(
+    homeFilmUiState: HomeFilmUiState,
+    retryAction: () -> Unit,
+    modifier: Modifier = Modifier,
+    onDeleteClick: (Film) -> Unit = {},
+    onDetailClick: (Int) -> Unit
+) {
+    when (homeFilmUiState) {
+        is HomeFilmUiState.Success -> {
+            if (homeFilmUiState.films.isEmpty()) {
+                Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(text = "Tidak ada data Film")
+                }
+            } else {
+                FilmLayout(
+                    films = homeFilmUiState.films,
+                    modifier = modifier.fillMaxWidth(),
+                    onDetailClick = { onDetailClick(it.id_film) },
+                    onDeleteClick = { onDeleteClick(it) }
+                )
+            }
+        }
+        is HomeFilmUiState.Loading -> OnLoading(modifier = modifier.fillMaxSize())
+        is HomeFilmUiState.Error -> OnError(retryAction, modifier = modifier.fillMaxSize())
+    }
+}
+
+@Composable
+fun OnLoading(modifier: Modifier = Modifier) {
+    Image(
+        modifier = modifier.size(20.dp),
+        painter = painterResource(R.drawable.loading_img),
+        contentDescription = ""
+    )
+}
+
+@Composable
+fun OnError(retryAction: () -> Unit, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_connection_error),
+            contentDescription = "",
+        )
+        Text(text = stringResource(R.string.loading_failed), modifier = Modifier.padding(16.dp))
+        Button(onClick = retryAction) {
+            Text(stringResource(R.string.retry))
+        }
+    }
+}
 
 @Composable
 fun FilmLayout(
