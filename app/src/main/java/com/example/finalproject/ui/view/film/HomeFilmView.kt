@@ -17,7 +17,81 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.finalproject.R
+import com.example.finalproject.model.Film
+import com.example.finalproject.ui.navigation.DestinasiNavigasi
+import com.example.finalproject.ui.viewmodel.PenyediaViewModelFactory
+import com.example.finalproject.ui.viewmodel.film.HomeFilmUiState
+import com.example.finalproject.ui.viewmodel.film.HomeFilmViewModel
 
+object DestinasiHomeFilm : DestinasiNavigasi {
+    override val route = "home_film"
+    override val titleRes = "Home Film"
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeFilmView(
+    navigateToItemEntry: () -> Unit,
+    navigateBack: () -> Unit,
+    modifier: Modifier = Modifier,
+    onDetailClick: (Int) -> Unit = {},
+    viewModel: HomeFilmViewModel = viewModel(factory = PenyediaViewModelFactory.Factory)
+) {
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
+    // Muat ulang data saat pertama kali masuk ke halaman
+    LaunchedEffect(Unit) {
+        viewModel.getFilm()
+    }
+
+    Scaffold(
+        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = { Text(DestinasiHomeFilm.titleRes) },
+                navigationIcon = {
+                    IconButton(onClick = navigateBack) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { viewModel.getFilm() }) {
+                        Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh")
+                    }
+                },
+                scrollBehavior = scrollBehavior // Tambahkan scrollBehavior
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = navigateToItemEntry,
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier.padding(18.dp)
+            ) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Film")
+            }
+        },
+    ) { innerPadding ->
+        HomeFilmStatus(
+            homeFilmUiState = viewModel.homeFilmUiState,
+            retryAction = { viewModel.getFilm() },
+            modifier = Modifier
+                .padding(innerPadding)
+                .padding(top = 70.dp), // Tambahkan padding atas untuk menghindari tumpang tindih
+            onDetailClick = onDetailClick,
+            onDeleteClick = {
+                viewModel.deleteFilm(it.id_film)
+                viewModel.getFilm()
+            }
+        )
+    }
+}
 
 @Composable
 fun HomeFilmStatus(
