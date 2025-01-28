@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -139,7 +140,8 @@ fun DetailFilmCard(
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             ComponentDetailFilm(judul = "ID Film", isinya = film.id_film.toString())
             Spacer(modifier = Modifier.height(8.dp))
@@ -162,20 +164,23 @@ fun ComponentDetailFilm(
     judul: String,
     isinya: String,
 ) {
-    Row(
+    Column(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalAlignment = Alignment.CenterHorizontally, // Konten di tengah horizontal
+        verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "$judul:",
+            text = judul,
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Gray
+            color = Color.Gray,
+            textAlign = TextAlign.Center
         )
         Text(
             text = isinya,
             fontSize = 16.sp,
             fontWeight = FontWeight.Normal,
+            textAlign = TextAlign.Center
         )
     }
 }
