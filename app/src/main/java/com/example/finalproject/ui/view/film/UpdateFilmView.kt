@@ -1,6 +1,8 @@
 package com.example.finalproject.ui.view.film
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
@@ -47,26 +49,30 @@ fun UpdateFilmView(
                 }
             )
         }
-    ) { innerPadding ->
-        EntryFilmBody(
-            insertFilmUiState = viewModel.uiState,
-            onFilmValueChange = viewModel::updateInsertFilmState,
-            onSaveClick = {
-                coroutineScope.launch {
-                    val isSuccess = viewModel.updateFilm()
-                    if (isSuccess) {
-                        navigateBack() // Kembali ke halaman detail
-                    } else {
-                        // Menampilkan pesan error jika update gagal
-                        println("Gagal mengupdate film.")
-                    }
-                }
-            },
+    ) {  innerPadding ->
+        // Gunakan Column dengan VerticalScroll untuk mengizinkan scroll
+        Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(top = 70.dp)
-        )
+                .verticalScroll(rememberScrollState()) // Tambahkan verticalScroll di sini
+                .padding(top = 16.dp)
+        ) {
+            EntryFilmBody(
+                insertFilmUiState = viewModel.uiState,
+                onFilmValueChange = viewModel::updateInsertFilmState,
+                onSaveClick = {
+                    coroutineScope.launch {
+                        val isSuccess = viewModel.updateFilm()
+                        if (isSuccess) {
+                            navigateBack() // Kembali ke halaman detail
+                        } else {
+                            // Menampilkan pesan error jika update gagal
+                            println("Gagal mengupdate film.")
+                        }
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
 }
-
-
