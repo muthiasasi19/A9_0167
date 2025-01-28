@@ -135,36 +135,44 @@ fun FormTiketInput(
         // Input untuk ID Penayangan (Read-only)
         OutlinedTextField(
             value = updateTiketUiEvent.id_penayangan,
-            onValueChange = { }, // Tidak perlu melakukan apa-apa karena read-only
+            onValueChange = { }, // Ga perlu melakukan apa-apa karena read-only
             label = { Text("ID Penayangan") },
             modifier = Modifier.fillMaxWidth(),
             enabled = false, // Non-editable
             singleLine = true
         )
 
-        // Input untuk Jumlah Tiket
+        // Input untuk Jumlah Tiket (Read-only)
         OutlinedTextField(
             value = updateTiketUiEvent.jumlah_tiket,
-            onValueChange = { onValueChange(updateTiketUiEvent.copy(jumlah_tiket = it)) },
+            onValueChange = { }, // read-only
             label = { Text("Jumlah Tiket") },
             modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
+            enabled = false, // Non-editable
             singleLine = true,
-            isError = updateTiketUiEvent.jumlah_tiket.isEmpty()
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                disabledBorderColor = MaterialTheme.colorScheme.outline,
+                disabledLabelColor = MaterialTheme.colorScheme.onSurface
+            )
         )
 
-        // Input untuk Total Harga
+        // Input untuk Total Harga (Read-only)
         OutlinedTextField(
             value = updateTiketUiEvent.total_harga,
-            onValueChange = { onValueChange(updateTiketUiEvent.copy(total_harga = it)) },
+            onValueChange = { }, // Tidak perlu melakukan apa-apa karena read-only
             label = { Text("Total Harga") },
             modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
+            enabled = false, // Non-editable
             singleLine = true,
-            isError = updateTiketUiEvent.total_harga.isEmpty()
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                disabledBorderColor = MaterialTheme.colorScheme.outline,
+                disabledLabelColor = MaterialTheme.colorScheme.onSurface
+            )
         )
 
-        // Input untuk Status Pembayaran
+        // Input untuk Status Pembayaran (Editable)
         OutlinedTextField(
             value = updateTiketUiEvent.status_pembayaran,
             onValueChange = { onValueChange(updateTiketUiEvent.copy(status_pembayaran = it)) },

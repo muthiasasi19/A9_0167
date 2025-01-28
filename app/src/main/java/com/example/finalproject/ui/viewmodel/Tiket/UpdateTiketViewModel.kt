@@ -19,19 +19,32 @@ class UpdateTiketViewModel(
     var uiState by mutableStateOf(UpdateTiketUiState())
         private set
 
-    // Fungsi untuk memuat data tiket berdasarkan ID
+    // Fungsi untuk menghitung total harga otomatis
+    fun calculateTotalHarga(jumlahTiket: String, hargaTiket: Double) {
+        val jumlah = jumlahTiket.toIntOrNull() ?: 0
+        val totalHarga = jumlah * hargaTiket
+        updateUpdateTiketState(
+            uiState.updateTiketUiEvent.copy(
+                jumlah_tiket = jumlahTiket,
+                total_harga = totalHarga.toString() // Update total harga otomatis
+            )
+        )
+    }
+
+    // Fungsi untuk mengupdate state
+    fun updateUpdateTiketState(updateTiketUiEvent: UpdateTiketUiEvent) {
+        uiState = UpdateTiketUiState(updateTiketUiEvent = updateTiketUiEvent)
+    }
+
+    // Fungsi untuk memuat data tiket
     fun loadTiket(idTiket: Int) {
         viewModelScope.launch {
             try {
-                // Ambil response dari repository
                 val response = tiketRepository.getTiketById(idTiket)
-
-                // untuk memeriksa apakah response berhasil
                 if (response.isSuccessful) {
-                    // Ekstrak data dari response
                     val apiResponse = response.body()
                     if (apiResponse != null && apiResponse.status) {
-                        val tiket = apiResponse.data // Ambil objek Tiket dari ApiResponse
+                        val tiket = apiResponse.data
                         uiState = UpdateTiketUiState(updateTiketUiEvent = UpdateTiketUiEvent.fromTiket(tiket))
                     } else {
                         throw IOException("Data tiket tidak ditemukan atau status false")
@@ -45,17 +58,11 @@ class UpdateTiketViewModel(
         }
     }
 
-    // Fungsi untuk mengupdate state berdasarkan event
-    fun updateUpdateTiketState(updateTiketUiEvent: UpdateTiketUiEvent) {
-        uiState = UpdateTiketUiState(updateTiketUiEvent = updateTiketUiEvent)
-    }
-
     // Fungsi untuk menyimpan perubahan tiket
     suspend fun updateTiket(): Boolean {
         return try {
             // Validasi data
-            if (uiState.updateTiketUiEvent.id_penayangan.isEmpty() ||
-                uiState.updateTiketUiEvent.jumlah_tiket.isEmpty() ||
+            if (uiState.updateTiketUiEvent.jumlah_tiket.isEmpty() ||
                 uiState.updateTiketUiEvent.total_harga.isEmpty() ||
                 uiState.updateTiketUiEvent.status_pembayaran.isEmpty()
             ) {
@@ -94,15 +101,15 @@ class UpdateTiketViewModel(
         fun toTiket(): Tiket {
             return Tiket(
                 id_tiket = id_tiket,
-                jumlah_tiket = jumlah_tiket.toInt() ?: 0,
-                total_harga = total_harga.toDouble() ?: 0.0,
+                jumlah_tiket = jumlah_tiket.toIntOrNull() ?: 0,
+                total_harga = total_harga.toDoubleOrNull() ?: 0.0,
                 status_pembayaran = status_pembayaran,
-                id_penayangan = id_penayangan.toIntOrNull() ?: 0 // Konversi ke Int
+                id_penayangan = id_penayangan.toIntOrNull() ?: 0
             )
         }
 
         companion object {
-            // Fungsi untuk mengkonversi objek Tiket ke UiEvent
+
             fun fromTiket(tiket: Tiket): UpdateTiketUiEvent {
                 return UpdateTiketUiEvent(
                     id_tiket = tiket.id_tiket,

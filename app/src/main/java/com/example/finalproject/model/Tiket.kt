@@ -9,4 +9,5 @@ data class Tiket(
     val total_harga: Double,
     val status_pembayaran: String,
     val id_penayangan:  Int? = null
+
 )
