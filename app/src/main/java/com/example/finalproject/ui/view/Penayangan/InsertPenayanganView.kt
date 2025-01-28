@@ -3,6 +3,7 @@ package com.example.finalproject.ui.view.Penayangan
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -11,6 +12,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.finalproject.model.Film
@@ -149,7 +152,11 @@ fun FormPenayanganInput(
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true,
-            isError = insertPenayanganUiEvent.id_penayangan.isEmpty() // Validasi kalau data kosong
+            isError = insertPenayanganUiEvent.id_penayangan.isEmpty(), // Validasi kalau data kosong
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number, // Keyboard angka
+                imeAction = ImeAction.Done
+            )
         )
 
         // Dropdown untuk memilih judul_Film
@@ -231,7 +238,11 @@ fun FormPenayanganInput(
             label = { Text("Tanggal Penayangan") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
-            singleLine = true
+            singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number, // Keyboard angka
+                imeAction = ImeAction.Done
+            )
         )
         OutlinedTextField(
             value = insertPenayanganUiEvent.harga_tiket,
@@ -239,7 +250,11 @@ fun FormPenayanganInput(
             label = { Text("Harga Tiket") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
-            singleLine = true
+            singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number, // Keyboard angka
+                imeAction = ImeAction.Done
+            )
         )
     }
 }

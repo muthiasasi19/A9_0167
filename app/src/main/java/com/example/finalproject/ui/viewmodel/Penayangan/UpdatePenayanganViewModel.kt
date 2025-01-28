@@ -52,8 +52,8 @@ class UpdatePenayanganViewModel(
                         uiState = InsertPenayanganViewModel.InsertPenayanganUiState(
                             insertPenayanganUiEvent = InsertPenayanganViewModel.InsertPenayanganUiEvent(
                                 id_penayangan = penayangan.id_penayangan.toString(),
-                                id_film = penayangan.judul_film,
-                                id_studio = penayangan.nama_studio, //.toString(),
+                                id_film = penayangan.id_film.toString(),
+                                id_studio = penayangan.id_studio.toString(),
                                 tanggal_penayangan = penayangan.tanggal_penayangan,
                                 harga_tiket = penayangan.harga_tiket.toString()
                             )

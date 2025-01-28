@@ -3,6 +3,7 @@ package com.example.finalproject.ui.view.Tiket
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -11,6 +12,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -134,7 +137,11 @@ fun FormTiketInput(
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true,
-            isError = insertTiketUiEvent.jumlah_tiket.isEmpty()
+            isError = insertTiketUiEvent.jumlah_tiket.isEmpty(),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number, // Keyboard angka
+                imeAction = ImeAction.Done
+            )
         )
 
         // Input untuk Total Harga (Read-only)
