@@ -15,6 +15,10 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -45,9 +49,49 @@ fun HomeFilmView(
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
+    // State untuk mengontrol dialog konfirmasi
+    var showDeleteConfirmation by remember { mutableStateOf(false) }
+    var filmToDelete by remember { mutableStateOf<Film?>(null) }
+
     // Muat ulang data saat pertama kali masuk ke halaman
     LaunchedEffect(Unit) {
         viewModel.getFilm()
+    }
+
+    // Tampilkan dialog konfirmasi jika diperlukan
+    if (showDeleteConfirmation) {
+        AlertDialog(
+            onDismissRequest = {
+                showDeleteConfirmation = false
+                filmToDelete = null
+            },
+            title = { Text("Konfirmasi Hapus") },
+            text = { Text("Apakah Anda yakin ingin menghapus film ini?") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        filmToDelete?.let { film ->
+                            viewModel.deleteFilm(film.id_film)
+                            viewModel.getFilm()
+                        }
+                        showDeleteConfirmation = false
+                        filmToDelete = null
+                    }
+                ) {
+                    Text("Hapus")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showDeleteConfirmation = false
+                        filmToDelete = null
+                    }
+                ) {
+                    Text("Batal")
+                }
+            }
+        )
     }
 
     Scaffold(
@@ -65,7 +109,7 @@ fun HomeFilmView(
                         Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh")
                     }
                 },
-                scrollBehavior = scrollBehavior // Tambahkan scrollBehavior
+                scrollBehavior = scrollBehavior
             )
         },
         floatingActionButton = {
@@ -83,11 +127,11 @@ fun HomeFilmView(
             retryAction = { viewModel.getFilm() },
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(top = 70.dp), // Tambahkan padding atas untuk menghindari tumpang tindih
+                .fillMaxSize(),
             onDetailClick = onDetailClick,
-            onDeleteClick = {
-                viewModel.deleteFilm(it.id_film)
-                viewModel.getFilm()
+            onDeleteClick = { film ->
+                filmToDelete = film
+                showDeleteConfirmation = true
             }
         )
     }
@@ -110,7 +154,7 @@ fun HomeFilmStatus(
             } else {
                 FilmLayout(
                     films = homeFilmUiState.films,
-                    modifier = modifier.fillMaxWidth(),
+                    modifier = modifier.fillMaxSize(),
                     onDetailClick = { onDetailClick(it.id_film) },
                     onDeleteClick = { onDeleteClick(it) }
                 )
@@ -156,8 +200,9 @@ fun FilmLayout(
     onDeleteClick: (Film) -> Unit = {}
 ) {
     LazyColumn(
-        modifier = modifier,
-        contentPadding = PaddingValues(top = 16.dp, bottom = 16.dp, start = 20.dp, end = 20.dp), // Tambahkan padding atas
+        modifier = modifier
+            .fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(films) { film ->
