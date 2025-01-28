@@ -12,6 +12,7 @@ import androidx.navigation.navArgument
 import com.example.finalproject.repository.FilmRepository
 import com.example.finalproject.repository.PenayanganRepository
 import com.example.finalproject.repository.StudioRepository
+import com.example.finalproject.ui.view.FullBackgroundScreen
 import com.example.finalproject.ui.view.HomeScreen
 import com.example.finalproject.ui.view.Penayangan.DetailPenayanganView
 import com.example.finalproject.ui.view.Penayangan.HomePenayanganView
@@ -44,12 +45,17 @@ fun PengelolaHalaman(
 ) {
     NavHost(
         navController = navController,
-        startDestination = "home", // Layar awal adalah HomeScreen
+        startDestination = "full_background",
         modifier = Modifier
     ) {
+        // Full Background Screen
+        composable("full_background") {
+            FullBackgroundScreen(navController = navController)
+        }
+
         // Home Screen
         composable("home") {
-            HomeScreen(navController = navController) // Menampilkan HomeScreen
+            HomeScreen(navController = navController)
         }
 
         // Home Film Screen

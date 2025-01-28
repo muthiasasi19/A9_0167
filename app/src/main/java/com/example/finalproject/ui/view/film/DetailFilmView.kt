@@ -160,9 +160,8 @@ fun DetailFilmCard(
             painter = painterResource(id = R.drawable.background1),
             contentDescription = "Background",
             modifier = Modifier
-                .fillMaxSize()
-                .alpha(0.6f),
-            contentScale = ContentScale.Crop
+                .fillMaxSize(),
+            contentScale = ContentScale.Fit
         )
 
         Card(
@@ -176,8 +175,8 @@ fun DetailFilmCard(
             Column(
                 modifier = Modifier.padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalAlignment = Alignment.Start // Konten dimulai dari kiri
-            ) {
+                horizontalAlignment = Alignment.Start
+            ){
                 ComponentDetailFilm(judul = "ID Film", isinya = film.id_film.toString())
                 Spacer(modifier = Modifier.height(8.dp))
                 ComponentDetailFilm(judul = "Judul Film", isinya = film.judul_film)

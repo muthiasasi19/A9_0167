@@ -13,15 +13,19 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -30,6 +34,7 @@ import com.example.finalproject.ui.navigation.DestinasiHomeFilm
 import com.example.finalproject.ui.navigation.DestinasiHomePenayangan
 import com.example.finalproject.ui.navigation.DestinasiHomeStudio
 import com.example.finalproject.ui.navigation.DestinasiHomeTiket
+import java.time.format.TextStyle
 
 @Composable
 fun HomeScreen(
@@ -65,9 +70,17 @@ fun HomeScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "MyDocs",
-                    fontSize = 28.sp,
-                    color = Color.White,
+                    text = "Selamat Datang di Cinema",
+                    style = androidx.compose.ui.text.TextStyle(
+                        fontFamily = FontFamily.Cursive,
+                        fontSize = 32.sp,
+                        color = Color.White,
+                        shadow = Shadow(
+                            color = Color.Black,
+                            offset = Offset(4f, 4f),
+                            blurRadius = 8f
+                        )
+                    )
                 )
             }
 
@@ -94,29 +107,49 @@ fun HomeScreen(
                     item {
                         CustomButton(
                             text = "Penayangan",
-                            icon = Icons.Default.Menu,
+                            icon = painterResource(id = R.drawable.penayangan),
                             onClick = { navController.navigate(DestinasiHomePenayangan.route) }
                         )
                     }
                     item {
                         CustomButton(
-                            text = "Tiket Saya",
-                            icon = Icons.Default.Face,
+                            text = "Tiket ",
+                            icon = painterResource(id = R.drawable.tiket),
                             onClick = { navController.navigate(DestinasiHomeTiket.route) }
                         )
                     }
                     item {
                         CustomButton(
                             text = "Film",
-                            icon = Icons.Default.Menu,
+                            icon = painterResource(id = R.drawable.custom_movie_icon),
                             onClick = { navController.navigate(DestinasiHomeFilm.route) }
                         )
                     }
                     item {
                         CustomButton(
                             text = "Studio",
-                            icon = Icons.Default.Face,
+                            icon = painterResource(id = R.drawable.studio),
                             onClick = { navController.navigate(DestinasiHomeStudio.route) }
+                        )
+                    }
+
+                    // Add "Selamat Menyaksikan" at the bottom
+                    item {
+                        Spacer(modifier = Modifier.height(16.dp)) // Adds space before the text
+                        Text(
+                            text = "Selamat Menyaksikan",
+                            style = androidx.compose.ui.text.TextStyle(
+                                fontFamily = FontFamily.Cursive,
+                                fontSize = 28.sp,
+                                color = Color.White,
+                                shadow = Shadow(
+                                    color = Color.Black,
+                                    offset = Offset(4f, 4f),
+                                    blurRadius = 8f
+                                )
+                            ),
+                            modifier = Modifier
+                                .align(Alignment.Center)
                         )
                     }
                 }
@@ -127,14 +160,14 @@ fun HomeScreen(
 @Composable
 fun CustomButton(
     text: String,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: Any,
     onClick: () -> Unit
 ) {
     Button(
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
-            .aspectRatio(1f), // Ensures square buttons
+            .aspectRatio(1f),
         colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.custom_yellow)),
         shape = RoundedCornerShape(16.dp)
     ) {
@@ -142,14 +175,29 @@ fun CustomButton(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                modifier = Modifier.size(24.dp),
-                tint = Color.White
-            )
+
+            when (icon) {
+                is androidx.compose.ui.graphics.vector.ImageVector -> {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        modifier = Modifier.size(98.dp),
+                        tint = Color.White
+                    )
+                }
+                is androidx.compose.ui.graphics.painter.Painter -> {
+                    Image(
+                        painter = icon,
+                        contentDescription = null,
+                        modifier = Modifier.size(98.dp),
+                        contentScale = ContentScale.Fit
+                    )
+                }
+            }
+
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = text, color = Color.White)
+            Text(text = text, color = Color.Black)
         }
     }
 }
+
