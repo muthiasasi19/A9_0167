@@ -130,7 +130,7 @@ fun HomePenayanganView(
             retryAction = { viewModel.getPenayangan() },
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(top = 16.dp),
+                .fillMaxSize(),
             onDetailClick = onDetailClick,
             onEditClick = { penayangan ->
                 navController.navigate("${DestinasiEditPenayangan.route}/${penayangan.id_penayangan}")
@@ -159,7 +159,7 @@ fun HomePenayanganStatus(
     } else {
         PenayanganLayout(
             penayanganList = penayanganList,
-            modifier = modifier.fillMaxWidth(),
+            modifier = modifier.fillMaxSize(),
             onDetailClick = { onDetailClick(it.id_penayangan) },
             onEditClick = onEditClick,
             onDeleteClick = { onDeleteClick(it) }
@@ -176,7 +176,8 @@ fun PenayanganLayout(
     onDeleteClick: (Penayangan) -> Unit = {}
 ) {
     LazyColumn(
-        modifier = modifier,
+        modifier = modifier
+            .fillMaxSize(),
         contentPadding = PaddingValues(
             top = 16.dp,
             bottom = 80.dp,

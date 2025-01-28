@@ -111,7 +111,7 @@ fun HomeTiketView(
             retryAction = { viewModel.getTiket() },
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(top = 16.dp),
+                .fillMaxSize(),
             onEditClick = { tiket ->
                 navController.navigate("${DestinasiEditTiket.route}/${tiket.id_tiket}")
             },
@@ -138,7 +138,7 @@ fun HomeTiketStatus(
     } else {
         TiketLayout(
             tiketList = tiketList,
-            modifier = modifier.fillMaxWidth(),
+            modifier = modifier.fillMaxSize(),
             onEditClick = onEditClick,
             onDeleteClick = { onDeleteClick(it) }
         )
@@ -154,13 +154,14 @@ fun TiketLayout(
     onDeleteClick: (Tiket) -> Unit = {}
 ) {
     LazyColumn(
-        modifier = modifier,
-        contentPadding = PaddingValues(
-            top = 16.dp,
-            bottom = 80.dp,
-            start = 20.dp,
-            end = 20.dp
-        ),
+        modifier = modifier
+        .fillMaxSize(), // Tambahkan nested scroll
+    contentPadding = PaddingValues(
+        top = 16.dp,
+        bottom = 80.dp, // Padding bawah untuk menghindari tumpang tindih dengan komponen lain
+        start = 16.dp,
+        end = 16.dp
+    ),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(tiketList) { tiket ->

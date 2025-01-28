@@ -14,6 +14,10 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -45,9 +49,49 @@ fun HomeStudioView(
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    // untuk memuat ulang data saat pertama kali masuk ke halaman
+    // State untuk mengontrol dialog konfirmasi penghapusan
+    var showDeleteConfirmation by remember { mutableStateOf(false) }
+    var studioToDelete by remember { mutableStateOf<Studio?>(null) }
+
+    // Memuat ulang data saat pertama kali masuk ke halaman
     LaunchedEffect(Unit) {
         viewModel.getStudios()
+    }
+
+    // AlertDialog untuk konfirmasi penghapusan
+    if (showDeleteConfirmation) {
+        AlertDialog(
+            onDismissRequest = {
+                showDeleteConfirmation = false
+                studioToDelete = null
+            },
+            title = { Text("Hapus Studio") },
+            text = { Text("Apakah Anda yakin ingin menghapus studio ini?") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        studioToDelete?.let { studio ->
+                            viewModel.deleteStudio(studio.id_studio)
+                            viewModel.getStudios() // Memuat ulang data setelah penghapusan
+                        }
+                        showDeleteConfirmation = false
+                        studioToDelete = null
+                    }
+                ) {
+                    Text("Ya")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showDeleteConfirmation = false
+                        studioToDelete = null
+                    }
+                ) {
+                    Text("Tidak")
+                }
+            }
+        )
     }
 
     Scaffold(
@@ -83,14 +127,14 @@ fun HomeStudioView(
             retryAction = { viewModel.getStudios() },
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(top = 70.dp),
+                .fillMaxSize(),
             onDetailClick = onDetailClick,
             onEditClick = { studio ->
                 navController.navigate("${DestinasiEditStudio.route}/${studio.id_studio}")
             },
-            onDeleteClick = {
-                viewModel.deleteStudio(it.id_studio)
-                viewModel.getStudios()
+            onDeleteClick = { studio ->
+                studioToDelete = studio
+                showDeleteConfirmation = true
             }
         )
     }
@@ -114,7 +158,7 @@ fun HomeStudioStatus(
             } else {
                 StudioLayout(
                     studios = homeStudioUiState.studios,
-                    modifier = modifier.fillMaxWidth(),
+                    modifier = modifier.fillMaxSize(),
                     onDetailClick = { onDetailClick(it.id_studio) },
                     onEditClick = onEditClick,
                     onDeleteClick = { onDeleteClick(it) }
@@ -135,15 +179,20 @@ fun StudioLayout(
     onDeleteClick: (Studio) -> Unit = {}
 ) {
     LazyColumn(
-        modifier = modifier,
-        contentPadding = PaddingValues(top = 16.dp, bottom = 16.dp, start = 20.dp, end = 20.dp), // Tambahkan padding atas
+        modifier = modifier.fillMaxSize(),
+        contentPadding = PaddingValues(
+            top = 16.dp,
+            bottom = 80.dp,
+            start = 16.dp,
+            end = 16.dp
+        ),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(studios) { studio ->
             StudioCard(
                 studio = studio,
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .clickable { onDetailClick(studio) },
                 onEditClick = { onEditClick(studio) },
                 onDeleteClick = { onDeleteClick(studio) }
