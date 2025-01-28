@@ -21,7 +21,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -94,46 +97,64 @@ fun HomeFilmView(
         )
     }
 
-    Scaffold(
-        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text(DestinasiHomeFilm.titleRes) },
-                navigationIcon = {
-                    IconButton(onClick = navigateBack) {
-                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                actions = {
-                    IconButton(onClick = { viewModel.getFilm() }) {
-                        Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh")
-                    }
-                },
-                scrollBehavior = scrollBehavior
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = navigateToItemEntry,
-                shape = MaterialTheme.shapes.medium,
-                modifier = Modifier.padding(18.dp)
-            ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Film")
-            }
-        },
-    ) { innerPadding ->
-        HomeFilmStatus(
-            homeFilmUiState = viewModel.homeFilmUiState,
-            retryAction = { viewModel.getFilm() },
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        // Menambahkan gambar sebagai background
+        Image(
+            painter = painterResource(id = R.drawable.background1),
+            contentDescription = "Background",
             modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
-            onDetailClick = onDetailClick,
-            onDeleteClick = { film ->
-                filmToDelete = film
-                showDeleteConfirmation = true
-            }
+                .fillMaxSize()
+                .alpha(0.6f),
+            contentScale = ContentScale.Crop
         )
+
+        Scaffold(
+            modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            topBar = {
+                CenterAlignedTopAppBar(
+                    title = { Text(DestinasiHomeFilm.titleRes) },
+                    navigationIcon = {
+                        IconButton(onClick = navigateBack) {
+                            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                        }
+                    },
+                    actions = {
+                        IconButton(onClick = { viewModel.getFilm() }) {
+                            Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh")
+                        }
+                    },
+                    scrollBehavior = scrollBehavior
+                )
+            },
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = navigateToItemEntry,
+                    shape = MaterialTheme.shapes.medium,
+                    modifier = Modifier.padding(18.dp),
+                    containerColor = Color(0xFF23395D)  ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add Film",
+                        tint = Color.White
+                    )
+                }
+            },
+        ) { innerPadding ->
+            HomeFilmStatus(
+                homeFilmUiState = viewModel.homeFilmUiState,
+                retryAction = { viewModel.getFilm() },
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize(),
+                onDetailClick = onDetailClick,
+                onDeleteClick = { film ->
+                    filmToDelete = film
+                    showDeleteConfirmation = true
+                }
+            )
+        }
     }
 }
 
@@ -226,7 +247,8 @@ fun FilmCard(
     Card(
         modifier = modifier,
         shape = MaterialTheme.shapes.medium,
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF23395D))
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -239,27 +261,32 @@ fun FilmCard(
                 Text(
                     text = film.judul_film,
                     style = MaterialTheme.typography.titleLarge,
+                    color = Color.White
                 )
                 Spacer(Modifier.weight(1f))
                 IconButton(onClick = { onDeleteClick(film) }) {
                     Icon(
                         imageVector = Icons.Default.Delete,
                         contentDescription = null,
+                        tint = Color.White
                     )
                 }
                 Text(
                     text = "ID: ${film.id_film}",
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Color.White
                 )
             }
 
             Text(
                 text = "Durasi: ${film.durasi} menit",
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.White
             )
             Text(
                 text = "Genre: ${film.genre}",
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.White
             )
         }
     }

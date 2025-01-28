@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
@@ -24,17 +26,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.finalproject.R
+import com.example.finalproject.ui.navigation.DestinasiHomeFilm
+import com.example.finalproject.ui.navigation.DestinasiHomePenayangan
+import com.example.finalproject.ui.navigation.DestinasiHomeStudio
+import com.example.finalproject.ui.navigation.DestinasiHomeTiket
 
 @Composable
 fun HomeScreen(
-    navController: NavController, // NavController untuk navigasi
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-
-
+        // Background Image (Blurred)
         Image(
             painter = painterResource(R.drawable.background1),
             contentDescription = null,
@@ -44,149 +49,107 @@ fun HomeScreen(
             contentScale = ContentScale.Crop
         )
 
-        // Bagian Header
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(130.dp)
-                .background(
-                    color = Color(0xAA90CAF9),
-                    shape = RoundedCornerShape(bottomEnd = 50.dp)
-                )
-                .padding(start = 16.dp, end = 16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "Cinemaku",
-                fontSize = 28.sp,
-                color = Color.White,
-                modifier = Modifier.fillMaxWidth().wrapContentWidth(Alignment.CenterHorizontally)
-            )
-        }
-
-
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 100.dp),
-            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            Spacer(modifier = Modifier.width(30.dp))
-
-
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+            // Header Section
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .background(
+                        color = Color(0xFF23395D),
+                        shape = RoundedCornerShape(bottomEnd = 50.dp, bottomStart = 50.dp)
+                    ),
+                contentAlignment = Alignment.Center
             ) {
-                // Button Film
-                Button(
-                    onClick = { navController.navigate("home_film") }, // Navigasi ke HomeFilm
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .size(width = 140.dp, height = 80.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.teal_200))
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Menu,
-                            contentDescription = null,
-                            modifier = Modifier.size(24.dp),
-                            tint = Color.White
-                        )
-                        Text(text = "Film")
-                    }
-                }
+                Text(
+                    text = "MyDocs",
+                    fontSize = 28.sp,
+                    color = Color.White,
+                )
+            }
 
-                // Button Studio
-                Button(
-                    onClick = { navController.navigate("home_studio") }, // Navigasi ke HomeStudio
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .size(width = 140.dp, height = 80.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.teal_200))
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Main Content
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+                    .background(
+                        color = Color(0xFF23395D),
+                        shape = RoundedCornerShape(30.dp)
+                    )
+                    .padding(16.dp)
+            ) {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier.fillMaxSize()
                 ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Face,
-                            contentDescription = null,
-                            modifier = Modifier.size(24.dp),
-                            tint = Color.White
+                    // Button Items
+                    item {
+                        CustomButton(
+                            text = "Penayangan",
+                            icon = Icons.Default.Menu,
+                            onClick = { navController.navigate(DestinasiHomePenayangan.route) }
                         )
-                        Text(text = "Studio")
+                    }
+                    item {
+                        CustomButton(
+                            text = "Tiket Saya",
+                            icon = Icons.Default.Face,
+                            onClick = { navController.navigate(DestinasiHomeTiket.route) }
+                        )
+                    }
+                    item {
+                        CustomButton(
+                            text = "Film",
+                            icon = Icons.Default.Menu,
+                            onClick = { navController.navigate(DestinasiHomeFilm.route) }
+                        )
+                    }
+                    item {
+                        CustomButton(
+                            text = "Studio",
+                            icon = Icons.Default.Face,
+                            onClick = { navController.navigate(DestinasiHomeStudio.route) }
+                        )
                     }
                 }
             }
-
-
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                // Button Penayangan
-                Button(
-                    onClick = {
-                        Log.d("HomeScreen", "Tombol Penayangan diklik, menuju ke home_penayangan")
-                        try {
-                            navController.navigate("home_penayangan")
-                            Log.d("HomeScreen", "Navigasi ke home_penayangan berhasil")
-                        } catch (e: Exception) {
-                            Log.e("HomeScreen", "Gagal navigasi ke home_penayangan: ${e.message}", e)
-                        }
-                    }, // Navigasi ke HomePenayangan
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .size(width = 140.dp, height = 80.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.teal_200))
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.custom_movie_icon),
-                            contentDescription = "Penayangan",
-                            modifier = Modifier.size(24.dp),
-                            tint = Color.White
-                        )
-                        Text(text = "Penayangan")
-                    }
-                }
-
-                // Button Tiket
-                Button(
-                    onClick = {
-                        Log.d("HomeScreen", "Tombol Tiket diklik, menuju ke home_tiket")
-                        navController.navigate("home_tiket")
-                    },
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .size(width = 140.dp, height = 80.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.teal_200))
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.custom_movie_icon),
-                            contentDescription = "Tiket",
-                            modifier = Modifier.size(24.dp),
-                            tint = Color.White
-                        )
-                        Text(text = "Tiket")
-                    }
-                }
-            }
+        }
+    }
+}
+@Composable
+fun CustomButton(
+    text: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    onClick: () -> Unit
+) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(1f), // Ensures square buttons
+        colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.custom_yellow)),
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier.size(24.dp),
+                tint = Color.White
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = text, color = Color.White)
         }
     }
 }

@@ -36,8 +36,8 @@ fun InsertPenayanganView(
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: InsertPenayanganViewModel = viewModel(factory = PenyediaViewModelFactory.Factory),
-    filmRepository: FilmRepository,       // Repository untuk film
-    studioRepository: StudioRepository    // Repository untuk studio
+    filmRepository: FilmRepository,
+    studioRepository: StudioRepository
 ) {
     val coroutineScope = rememberCoroutineScope()
     var filmList by remember { mutableStateOf<List<Film>>(emptyList()) }
@@ -97,8 +97,8 @@ fun EntryPenayanganBody(
     insertPenayanganUiState: InsertPenayanganViewModel.InsertPenayanganUiState,
     onPenayanganValueChange: (InsertPenayanganViewModel.InsertPenayanganUiEvent) -> Unit,
     onSaveClick: () -> Unit,
-    filmList: List<Film>,       // Daftar film
-    studioList: List<Studio>,   // Daftar studio
+    filmList: List<Film>,
+    studioList: List<Studio>,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -117,7 +117,9 @@ fun EntryPenayanganBody(
         Button(
             onClick = onSaveClick,
             shape = MaterialTheme.shapes.small,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF23395D))
+
         ) {
             Text(text = "Simpan")
         }
@@ -154,7 +156,7 @@ fun FormPenayanganInput(
             singleLine = true,
             isError = insertPenayanganUiEvent.id_penayangan.isEmpty(), // Validasi kalau data kosong
             keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Number, // Keyboard angka
+                keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done
             )
         )
@@ -240,7 +242,7 @@ fun FormPenayanganInput(
             enabled = enabled,
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Number, // Keyboard angka
+                keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done
             )
         )
@@ -252,9 +254,10 @@ fun FormPenayanganInput(
             enabled = enabled,
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Number, // Keyboard angka
+                keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done
             )
         )
     }
 }
+

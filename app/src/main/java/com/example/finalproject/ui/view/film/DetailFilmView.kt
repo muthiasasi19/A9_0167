@@ -1,6 +1,7 @@
 package com.example.finalproject.ui.view.film
 
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -10,13 +11,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.finalproject.R
 import com.example.finalproject.model.Film
 import com.example.finalproject.ui.navigation.DestinasiNavigasi
 import com.example.finalproject.ui.viewmodel.PenyediaViewModelFactory
@@ -29,7 +33,6 @@ object DestinasiDetailFilm : DestinasiNavigasi {
     const val id_film = "id_film"
     val routeWithArgs = "$route/{$id_film}"
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailFilmView(
@@ -80,8 +83,19 @@ fun DetailFilmView(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(innerPadding)
-                .padding(top = 70.dp)
+
         ) {
+            // Menambahkan gambar sebagai background
+            Image(
+                painter = painterResource(id = R.drawable.background1), // Ganti dengan resource gambar Anda
+                contentDescription = "Background",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .alpha(0.6f),
+                contentScale = ContentScale.Crop
+            )
+
+            // Menampilkan DetailFilmStatus di atas gambar
             DetailFilmStatus(
                 filmUiState = detailFilmViewModel.detailFilmUiState,
                 retryAction = { detailFilmViewModel.getFilmById() },
@@ -119,7 +133,12 @@ fun DetailFilmStatus(
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(text = "Terjadi kesalahan.")
                     Spacer(modifier = Modifier.height(8.dp))
-                    Button(onClick = retryAction) {
+                    Button(
+                        onClick = retryAction,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF23395D)
+                        )
+                    ) {
                         Text(text = "Coba Lagi")
                     }
                 }
@@ -133,27 +152,44 @@ fun DetailFilmCard(
     film: Film,
     modifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = modifier,
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        shape = MaterialTheme.shapes.medium
+    Box(
+        modifier = modifier
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+        // Menambahkan gambar sebagai background Card
+        Image(
+            painter = painterResource(id = R.drawable.background1),
+            contentDescription = "Background",
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(0.6f),
+            contentScale = ContentScale.Crop
+        )
+
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+            shape = MaterialTheme.shapes.medium,
+            colors = CardDefaults.cardColors(
+                containerColor = Color(0xFF23395D)
+            )
         ) {
-            ComponentDetailFilm(judul = "ID Film", isinya = film.id_film.toString())
-            Spacer(modifier = Modifier.height(8.dp))
-            ComponentDetailFilm(judul = "Judul Film", isinya = film.judul_film)
-            Spacer(modifier = Modifier.height(8.dp))
-            ComponentDetailFilm(judul = "Durasi", isinya = "${film.durasi} menit")
-            Spacer(modifier = Modifier.height(8.dp))
-            ComponentDetailFilm(judul = "Deskripsi", isinya = film.deskripsi)
-            Spacer(modifier = Modifier.height(8.dp))
-            ComponentDetailFilm(judul = "Genre", isinya = film.genre)
-            Spacer(modifier = Modifier.height(8.dp))
-            ComponentDetailFilm(judul = "Rating Usia", isinya = film.rating_usia)
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.Start // Konten dimulai dari kiri
+            ) {
+                ComponentDetailFilm(judul = "ID Film", isinya = film.id_film.toString())
+                Spacer(modifier = Modifier.height(8.dp))
+                ComponentDetailFilm(judul = "Judul Film", isinya = film.judul_film)
+                Spacer(modifier = Modifier.height(8.dp))
+                ComponentDetailFilm(judul = "Durasi", isinya = "${film.durasi} menit")
+                Spacer(modifier = Modifier.height(8.dp))
+                ComponentDetailFilm(judul = "Deskripsi", isinya = film.deskripsi)
+                Spacer(modifier = Modifier.height(8.dp))
+                ComponentDetailFilm(judul = "Genre", isinya = film.genre)
+                Spacer(modifier = Modifier.height(8.dp))
+                ComponentDetailFilm(judul = "Rating Usia", isinya = film.rating_usia)
+            }
         }
     }
 }
@@ -166,21 +202,18 @@ fun ComponentDetailFilm(
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally, // Konten di tengah horizontal
         verticalArrangement = Arrangement.Center
     ) {
         Text(
             text = judul,
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Gray,
-            textAlign = TextAlign.Center
+            color = Color.Gray
         )
         Text(
             text = isinya,
             fontSize = 16.sp,
-            fontWeight = FontWeight.Normal,
-            textAlign = TextAlign.Center
+            fontWeight = FontWeight.Normal
         )
     }
 }

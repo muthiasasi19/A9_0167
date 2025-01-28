@@ -1,6 +1,7 @@
 package com.example.finalproject.ui.view.Penayangan
 
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -10,13 +11,17 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.finalproject.R
 import com.example.finalproject.model.Penayangan
 import com.example.finalproject.ui.navigation.DestinasiEntryTiket
 import com.example.finalproject.ui.navigation.DestinasiNavigasi
@@ -78,8 +83,9 @@ fun DetailPenayanganView(
                 onClick = {
                     penayangan?.let {
                         navController.navigate("${DestinasiEntryTiket.route}/${it.id_penayangan}?hargaTiket=${it.harga_tiket}")
-                    }
-                }
+                    }                },
+                containerColor =  Color(0xFF23395D),
+                contentColor = Color.White
             ) {
                 Text(text = "Beli Tiket")
             }
@@ -89,8 +95,18 @@ fun DetailPenayanganView(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(innerPadding)
-                .padding(top = 70.dp)
         ) {
+            // Menambahkan gambar sebagai background
+            Image(
+                painter = painterResource(id = R.drawable.background1),
+                contentDescription = "Background",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .alpha(0.6f),
+                contentScale = ContentScale.Crop
+            )
+
+            // Menampilkan DetailPenayanganCard di atas gambar
             if (penayangan != null) {
                 Log.d("DetailPenayanganView", "Penayangan data loaded: $penayangan")
                 DetailPenayanganCard(
@@ -146,7 +162,11 @@ fun DetailPenayanganCard(
     Card(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        shape = MaterialTheme.shapes.medium
+        shape = MaterialTheme.shapes.medium,
+        colors = CardDefaults.cardColors(
+            containerColor =  Color(0xFF23395D),
+            contentColor = Color.White
+        )
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -179,12 +199,13 @@ fun ComponentDetailPenayangan(
             text = "$judul:",
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Gray
+            color = Color.White
         )
         Text(
             text = isinya,
             fontSize = 16.sp,
             fontWeight = FontWeight.Normal,
+            color = Color.White
         )
     }
 }

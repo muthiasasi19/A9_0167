@@ -13,6 +13,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -104,7 +105,6 @@ fun HomeTiketView(
                 scrollBehavior = scrollBehavior
             )
         },
-
     ) { innerPadding ->
         HomeTiketStatus(
             tiketList = tiketList,
@@ -155,10 +155,10 @@ fun TiketLayout(
 ) {
     LazyColumn(
         modifier = modifier
-        .fillMaxSize(), // Tambahkan nested scroll
+        .fillMaxSize(),
     contentPadding = PaddingValues(
         top = 16.dp,
-        bottom = 80.dp, // Padding bawah untuk menghindari tumpang tindih dengan komponen lain
+        bottom = 80.dp,
         start = 16.dp,
         end = 16.dp
     ),
@@ -183,10 +183,14 @@ fun TiketCard(
     onEditClick: (Tiket) -> Unit,
     onDeleteClick: (Tiket) -> Unit = {}
 ) {
+    val cardColor = Color(0xFF23395D)
+    val iconColor = Color.White
+
     Card(
         modifier = modifier,
         shape = MaterialTheme.shapes.medium,
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        colors = CardDefaults.cardColors(containerColor = cardColor)
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -194,33 +198,37 @@ fun TiketCard(
         ) {
             Text(
                 text = "ID Tiket: ${tiket.id_tiket}",
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
+                color = Color.White
             )
 
             Text(
                 text = "Jumlah Tiket: ${tiket.jumlah_tiket}",
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                color = Color.White.copy(alpha = 0.7f)
             )
+
             Text(
                 text = "Total Harga: Rp${tiket.total_harga}",
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                color = Color.White.copy(alpha = 0.7f)
             )
+
             Text(
                 text = "Status Pembayaran: ${tiket.status_pembayaran}",
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                color = Color.White.copy(alpha = 0.7f)
             )
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
                 IconButton(onClick = { onEditClick(tiket) }) {
-                    Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
+                    Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit", tint = iconColor)
                 }
                 IconButton(onClick = { onDeleteClick(tiket) }) {
-                    Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
+                    Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete", tint = iconColor)
                 }
             }
         }

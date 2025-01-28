@@ -119,7 +119,10 @@ fun EntryFilmBody(
         Button(
             onClick = onSaveClick,
             shape = MaterialTheme.shapes.small,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF23395D)
+            )
         ) {
             Text(text = "Simpan")
         }

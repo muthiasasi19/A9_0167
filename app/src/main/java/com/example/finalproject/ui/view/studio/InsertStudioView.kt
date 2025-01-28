@@ -121,10 +121,15 @@ fun EntryStudioBody(
         Button(
             onClick = onSaveClick,
             shape = MaterialTheme.shapes.small,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF23395D))
         ) {
-            Text(text = "Simpan")
+            Text(
+                text = "Simpan",
+                color = Color.White
+            )
         }
+
     }
 }
 
@@ -147,7 +152,7 @@ fun FormStudioInput(
             enabled = enabled,
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Number, // Keyboard angka
+                keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done
             )
         )
@@ -167,7 +172,7 @@ fun FormStudioInput(
             enabled = enabled,
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Number, // Keyboard angka
+                keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done
             )
         )

@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -96,6 +97,8 @@ fun EntryTiketBody(
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val buttonColor = Color(0xFF23395D)
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -110,14 +113,15 @@ fun EntryTiketBody(
         Button(
             onClick = onSaveClick,
             shape = MaterialTheme.shapes.small,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF23395D))
         ) {
-            Text(text = "Simpan")
+            Text(text = "Simpan", color = Color.White)
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun FormTiketInput(
     insertTiketUiEvent: InsertTiketViewModel.InsertTiketUiEvent,
@@ -139,7 +143,7 @@ fun FormTiketInput(
             singleLine = true,
             isError = insertTiketUiEvent.jumlah_tiket.isEmpty(),
             keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Number, // Keyboard angka
+                keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done
             )
         )
@@ -147,16 +151,12 @@ fun FormTiketInput(
         // Input untuk Total Harga (Read-only)
         OutlinedTextField(
             value = insertTiketUiEvent.total_harga,
-            onValueChange = { }, // Tidak bisa diubah
+            onValueChange = { },
             label = { Text("Total Harga") },
             modifier = Modifier.fillMaxWidth(),
             enabled = false, // Non-editable
             singleLine = true,
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                disabledTextColor = MaterialTheme.colorScheme.onSurface,
-                disabledBorderColor = MaterialTheme.colorScheme.outline,
-                disabledLabelColor = MaterialTheme.colorScheme.onSurface
-            )
+
         )
 
         // Input untuk Status Pembayaran

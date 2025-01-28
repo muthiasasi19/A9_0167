@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -211,7 +212,8 @@ fun StudioCard(
     Card(
         modifier = modifier,
         shape = MaterialTheme.shapes.medium,
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF23395D))
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -224,29 +226,34 @@ fun StudioCard(
                 Text(
                     text = studio.nama_studio,
                     style = MaterialTheme.typography.titleLarge,
+                    color = Color.White
                 )
                 Spacer(Modifier.weight(1f))
                 IconButton(onClick = { onEditClick(studio) }) {
                     Icon(
                         imageVector = Icons.Default.Edit,
                         contentDescription = "Edit",
+                        tint = Color.White // Icon color
                     )
                 }
                 IconButton(onClick = { onDeleteClick(studio) }) {
                     Icon(
                         imageVector = Icons.Default.Delete,
                         contentDescription = "Delete",
+                        tint = Color.White
                     )
                 }
                 Text(
                     text = "ID: ${studio.id_studio}",
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Color.White
                 )
             }
 
             Text(
                 text = "Kapasitas: ${studio.kapasitas} kursi",
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.White
             )
         }
     }
